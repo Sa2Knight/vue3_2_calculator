@@ -1,27 +1,16 @@
 <template>
   <div class="calculator">
     <div class="screen">
-      <div class="answer">{{ answer }}</div>
+      <div class="answer">{{ calculator.answer }}</div>
     </div>
     <div class="buttons">
-      <CalcButton class="button" label="C" />
-      <CalcButton class="button" label="+=" />
-      <CalcButton class="button" label="%" />
-      <CalcButton class="button" label="/" />
-      <CalcButton class="button" label="7" />
-      <CalcButton class="button" label="8" />
-      <CalcButton class="button" label="9" />
-      <CalcButton class="button" label="X" />
-      <CalcButton class="button" label="4" />
-      <CalcButton class="button" label="5" />
-      <CalcButton class="button" label="6" />
-      <CalcButton class="button" label="-" />
-      <CalcButton class="button" label="1" />
-      <CalcButton class="button" label="2" />
-      <CalcButton class="button" label="3" />
-      <CalcButton class="button" label="+" />
-      <CalcButton class="button" label="0" />
-      <CalcButton class="button" label="." />
+      <CalcButton
+        :key="label"
+        v-for="label in calculator.buttonLabels.slice(0, -1)"
+        class="button"
+        :label="label"
+        @onClick="calculator.sendCommand(label)"
+      />
       <CalcButton
         class="button equal"
         label="="
@@ -40,8 +29,17 @@ import CalcButton from "./CalcButton.vue";
 export default defineComponent({
   components: { CalcButton },
   setup() {
-    const { answer } = useCalculator(0);
-    return { answer };
+    const calculator = useCalculator(0);
+
+    // prettier-ignore
+    const calcButtonLabels = [
+        "C", "+=", "%", "/",
+        "7", "8", "9", "X",
+        "4", "5", "6", "-",
+        "1", "2", "3", "+",
+        "0", ".",
+    ]
+    return { calculator, calcButtonLabels };
   },
 });
 </script>

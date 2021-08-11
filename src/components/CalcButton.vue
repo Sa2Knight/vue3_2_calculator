@@ -1,5 +1,5 @@
 <template>
-  <div class="calcButton">
+  <div @click="$emit('onClick')" class="calcButton">
     <div class="label">{{ label }}</div>
   </div>
 </template>
@@ -22,6 +22,7 @@ export default defineComponent({
       default: "#3d2bb8",
     },
   },
+  emits: ["onClick"],
 });
 </script>
 
