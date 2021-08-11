@@ -12,5 +12,13 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style lang="scss">
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fbb034;
+  background-image: linear-gradient( 315deg ,#fbb034,#fd0 74%);
+}
 </style>
