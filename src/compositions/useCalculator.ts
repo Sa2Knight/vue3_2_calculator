@@ -6,12 +6,14 @@ export type Formula = {
   leftValue: number;
   operator: "+" | "-" | "X" | "/" | null;
   rightValue: number | null;
+  isPointEnd: boolean;
 };
 
 const initialFormula: Formula = {
   leftValue: 0,
   operator: null,
   rightValue: null,
+  isPointEnd: false,
 };
 
 // prettier-ignore
@@ -44,7 +46,12 @@ function calc(formula: Formula): Formula {
     }
   })();
 
-  return { leftValue: answer, operator: null, rightValue: null };
+  return {
+    leftValue: answer,
+    operator: null,
+    rightValue: null,
+    isPointEnd: false,
+  };
 }
 
 function appendNumber(v1: number | string, v2: number | string): number {
@@ -68,6 +75,7 @@ function runCommand(command: Command, formula: Formula): Formula {
           leftValue: inversion(formula.rightValue),
           operator: null,
           rightValue: null,
+          isPointEnd: false,
         };
       } else {
         return {
@@ -81,12 +89,14 @@ function runCommand(command: Command, formula: Formula): Formula {
           leftValue: formula.rightValue / 100,
           operator: null,
           rightValue: null,
+          isPointEnd: false,
         };
       } else {
         return {
           leftValue: formula.leftValue / 100,
           operator: null,
           rightValue: null,
+          isPointEnd: false,
         };
       }
     case "/":
@@ -123,7 +133,8 @@ export default function useCalculator() {
     formula: { ...initialFormula },
   });
   const displayValue = computed(() => {
-    return state.formula.rightValue || state.formula.leftValue;
+    const value = state.formula.rightValue || state.formula.leftValue;
+    return state.formula.isPointEnd ? `${value}.` : `${value}`;
   });
   const sendCommand = (command: Command) => {
     state.formula = runCommand(command, state.formula);
