@@ -1,3 +1,4 @@
+import { format } from "prettier";
 import { computed, reactive, ref, watch } from "vue";
 
 export type Command = typeof buttonLabels[number];
@@ -67,8 +68,19 @@ function runCommand(command: Command, formula: Formula): Formula {
         leftValue: inversion(formula.leftValue),
       };
     case "%":
-      alert("未実装");
-      return initialFormula;
+      if (formula.rightValue) {
+        return {
+          leftValue: formula.rightValue / 100,
+          operator: null,
+          rightValue: null,
+        };
+      } else {
+        return {
+          leftValue: formula.leftValue / 100,
+          operator: null,
+          rightValue: null,
+        };
+      }
     case "/":
     case "X":
     case "-":
