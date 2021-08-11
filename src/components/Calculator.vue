@@ -1,7 +1,7 @@
 <template>
   <div class="calculator">
     <div class="screen">
-      <div class="answer">{{ number }}</div>
+      <div class="answer">{{ answer }}</div>
     </div>
     <div class="buttons">
       <CalcButton class="button" label="C" />
@@ -34,13 +34,15 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import useCalculator from "../compositions/useCalculator";
 import CalcButton from "./CalcButton.vue";
 
 export default defineComponent({
   components: { CalcButton },
-  data: () => ({
-    number: 0,
-  }),
+  setup() {
+    const { answer } = useCalculator(0);
+    return { answer };
+  },
 });
 </script>
 
