@@ -1,4 +1,4 @@
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 
 export type Command = typeof buttonLabels[number];
 export type Formula = {
@@ -22,6 +22,30 @@ const buttonLabels = [
   "0", ".", "="
 ] as const
 
+function calcable(formula: Formula): boolean {
+  return formula.operator !== null && formula.rightValue !== null;
+}
+
+function calc(formula: Formula): Formula {
+  const { leftValue, operator, rightValue } = formula;
+  if (operator === null || rightValue === null) return formula;
+
+  const answer = (() => {
+    switch (operator) {
+      case "+":
+        return leftValue + rightValue;
+      case "-":
+        return leftValue - rightValue;
+      case "X":
+        return leftValue * rightValue;
+      case "/":
+        return leftValue / rightValue;
+    }
+  })();
+
+  return { leftValue: answer, operator: null, rightValue: null };
+}
+
 function appendNumber(v1: number | string, v2: number | string): number {
   return Number(`${v1}${v2}`);
 }
@@ -39,37 +63,38 @@ function runCommand(command: Command, formula: Formula): Formula {
       return initialFormula;
     case "+-":
       return {
+        ...formula,
         leftValue: inversion(formula.leftValue),
-        operator: null,
-        rightValue: null,
       };
     case "%":
       alert("未実装");
       return initialFormula;
     case "/":
-      alert("未実装");
-      return initialFormula;
     case "X":
-      alert("未実装");
-      return initialFormula;
     case "-":
-      alert("未実装");
-      return initialFormula;
     case "+":
-      alert("未実装");
-      return initialFormula;
+      return {
+        ...calc(formula),
+        operator: command,
+        rightValue: 0,
+      };
     case ".":
       alert("未実装");
       return initialFormula;
     case "=":
-      alert("未実装");
-      return initialFormula;
+      return calc(formula);
     default:
-      return {
-        leftValue: appendNumber(formula.leftValue, command),
-        operator: null,
-        rightValue: null,
-      };
+      if (formula.operator) {
+        return {
+          ...formula,
+          rightValue: appendNumber(formula.rightValue || 0, command),
+        };
+      } else {
+        return {
+          ...formula,
+          leftValue: appendNumber(formula.leftValue, command),
+        };
+      }
   }
 }
 
@@ -83,5 +108,12 @@ export default function useCalculator() {
   const sendCommand = (command: Command) => {
     state.formula = runCommand(command, state.formula);
   };
+  // for debug
+  watch(
+    () => state.formula,
+    () => {
+      console.log(state.formula);
+    }
+  );
   return { displayValue, sendCommand, buttonLabels };
 }

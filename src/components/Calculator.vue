@@ -16,6 +16,7 @@
         label="="
         color="#f33d1d"
         hoveredColor="#e4270f"
+        @onClick="sendCommand('=')"
       />
     </div>
   </div>
