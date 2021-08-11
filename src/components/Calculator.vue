@@ -1,15 +1,15 @@
 <template>
   <div class="calculator">
     <div class="screen">
-      <div class="answer">{{ calculator.answer }}</div>
+      <div class="answer">{{ displayValue }}</div>
     </div>
     <div class="buttons">
       <CalcButton
         :key="label"
-        v-for="label in calculator.buttonLabels.slice(0, -1)"
+        v-for="label in buttonLabels.slice(0, -1)"
         class="button"
         :label="label"
-        @onClick="calculator.sendCommand(label)"
+        @onClick="sendCommand(label)"
       />
       <CalcButton
         class="button equal"
@@ -30,6 +30,7 @@ export default defineComponent({
   components: { CalcButton },
   setup() {
     const calculator = useCalculator(0);
+    const { displayValue, sendCommand, buttonLabels } = calculator;
 
     // prettier-ignore
     const calcButtonLabels = [
@@ -39,7 +40,7 @@ export default defineComponent({
         "1", "2", "3", "+",
         "0", ".",
     ]
-    return { calculator, calcButtonLabels };
+    return { displayValue, sendCommand, buttonLabels };
   },
 });
 </script>
