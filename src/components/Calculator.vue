@@ -1,14 +1,16 @@
 <template>
   <div class="calculator">
-    <div class="screen">スクリーン</div>
+    <div class="screen">
+      <div class="answer">{{ number }}</div>
+    </div>
     <div class="controller">コントローラー</div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 
-export default defineComponent({});
+const number = ref(0);
 </script>
 
 <style lang="scss" scoped>
@@ -21,11 +23,18 @@ export default defineComponent({});
   background-image: linear-gradient(315deg, #485461, #28313b 74%);
 
   .screen {
+    display: flex;
+    justify-content: flex-end;
     width: 100%;
     height: 100px;
     margin-bottom: 10px;
     border-radius: 10px;
     background-color: rgba(67, 87, 105, 0.18);
+    color: #fff;
+    font-size: 70px;
+    .answer {
+      padding: 0 10px;
+    }
   }
 
   .controller {
