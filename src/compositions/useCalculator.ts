@@ -63,10 +63,18 @@ function runCommand(command: Command, formula: Formula): Formula {
     case "C":
       return initialFormula;
     case "+-":
-      return {
-        ...formula,
-        leftValue: inversion(formula.leftValue),
-      };
+      if (formula.rightValue) {
+        return {
+          leftValue: inversion(formula.rightValue),
+          operator: null,
+          rightValue: null,
+        };
+      } else {
+        return {
+          ...formula,
+          leftValue: inversion(formula.leftValue),
+        };
+      }
     case "%":
       if (formula.rightValue) {
         return {

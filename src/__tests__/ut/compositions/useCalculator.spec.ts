@@ -20,12 +20,6 @@ describe("compositions", () => {
       test("1 2 3 C", () => {
         expect(calc("1", "2", "3", "C")).toBe(0);
       });
-      test("1 +-", () => {
-        expect(calc("1", "+-")).toBe(-1);
-      });
-      test("1 +- +-", () => {
-        expect(calc("1", "+-", "+-")).toBe(1);
-      });
     });
 
     describe("右辺と左辺を入力するパターン", () => {
@@ -100,6 +94,18 @@ describe("compositions", () => {
 
       test("2 + 3 %", () => {
         expect(calc("2", "+", "3", "%")).toBe(0.03); // 表示中の数値を使う仕様
+      });
+    });
+
+    describe("+- を使うパターン", () => {
+      test("1 +-", () => {
+        expect(calc("1", "+-")).toBe(-1);
+      });
+      test("1 +- +-", () => {
+        expect(calc("1", "+-", "+-")).toBe(1);
+      });
+      test("1 + 2 +- =", () => {
+        expect(calc("1", "+", "2", "+-", "=")).toBe(-2); // 表示中の数値を使う仕様
       });
     });
   });
