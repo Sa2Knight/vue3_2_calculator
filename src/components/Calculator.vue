@@ -33,12 +33,16 @@ export default defineComponent({
     const calculator = useCalculator();
     const calculatorState = calculator.state;
     const { sendCommand, buttonLabels } = calculator;
+
+    // composition から受け取った値を、3桁区切りや指数表記に整える
     const displayValue = computed(() => {
       const originValue = calculatorState.value.displayValue;
-      if (originValue.indexOf(".") > 0) {
-        return originValue;
-      } else {
+      if (originValue.length > 15) {
+        return `${Number(originValue).toExponential()}`;
+      } else if (originValue.indexOf(".") === -1) {
         return Number(originValue).toLocaleString().replace(/,/g, " ");
+      } else {
+        return originValue;
       }
     });
 
