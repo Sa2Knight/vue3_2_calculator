@@ -46,8 +46,19 @@ export default defineComponent({
       }
     });
 
+    // 数値の桁数に応じてフォントサイズを確定する
+    const fontSize = computed(() => {
+      const length = displayValue.value.length;
+      if (length < 7) return "70px";
+      if (length < 10) return "55px";
+      if (length < 13) return "40px";
+      if (length < 16) return "30px";
+      return "20px";
+    });
+
     return {
       displayValue,
+      fontSize,
       sendCommand,
       buttonLabels,
     };
@@ -67,13 +78,14 @@ export default defineComponent({
   .screen {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     width: 100%;
     height: 100px;
     margin-bottom: 10px;
     border-radius: 10px;
     background-color: rgba(67, 87, 105, 0.18);
     color: #fff;
-    font-size: 70px;
+    font-size: v-bind(fontSize);
     .answer {
       padding: 0 10px;
     }
