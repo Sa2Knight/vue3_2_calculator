@@ -1,7 +1,7 @@
 <template>
   <div class="calculator">
     <div class="screen">
-      <div class="answer">{{ calculatorState.displayValue }}</div>
+      <div class="answer">{{ displayValue }}</div>
     </div>
     <div class="buttons">
       <CalcButton
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import useCalculator from "../compositions/useCalculator";
 import CalcButton from "./CalcButton.vue";
 
@@ -33,9 +33,17 @@ export default defineComponent({
     const calculator = useCalculator();
     const calculatorState = calculator.state;
     const { sendCommand, buttonLabels } = calculator;
+    const displayValue = computed(() => {
+      const originValue = calculatorState.value.displayValue;
+      if (originValue.indexOf(".") > 0) {
+        return originValue;
+      } else {
+        return Number(originValue).toLocaleString().replace(/,/g, " ");
+      }
+    });
 
     return {
-      calculatorState,
+      displayValue,
       sendCommand,
       buttonLabels,
     };

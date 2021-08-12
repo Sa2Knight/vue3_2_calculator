@@ -14,7 +14,7 @@ describe("compositions", () => {
       });
       test("1 2 3 4 5 6 7 8 9 0", () => {
         expect(calc("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")).toBe(
-          "1 234 567 890"
+          "1234567890"
         );
       });
       test("1 2 3 C", () => {
@@ -167,39 +167,12 @@ describe("compositions", () => {
       });
     });
 
-    describe("桁数によるフォーマットの確認", () => {
-      test("3桁", () => {
-        expect(calc(...Array(3).fill("1"))).toBe("111");
-      });
-      test("4桁", () => {
-        expect(calc(...Array(4).fill("1"))).toBe("1 111");
-      });
-      test("6桁", () => {
-        expect(calc(...Array(6).fill("1"))).toBe("111 111");
-      });
-      test("7桁", () => {
-        expect(calc(...Array(7).fill("1"))).toBe("1 111 111");
-      });
-      test("9桁", () => {
-        expect(calc(...Array(9).fill("1"))).toBe("111 111 111");
-      });
-      test("10桁", () => {
-        expect(calc(...Array(10).fill("1"))).toBe("1 111 111 111");
-      });
-      test("12桁", () => {
-        expect(calc(...Array(12).fill("1"))).toBe("111 111 111 111");
-      });
-      test("13桁", () => {
-        expect(calc(...Array(13).fill("1"))).toBe("1 111 111 111 111");
-      });
-      test("15桁", () => {
-        expect(calc(...Array(15).fill("1"))).toBe("111 111 111 111 111");
-      });
-      test("16桁", () => {
-        expect(calc(...Array(16).fill("1"))).toBe("1 111 111 111 111 111");
+    describe("桁数制限", () => {
+      test("16桁(上限いっぱい)", () => {
+        expect(calc(...Array(16).fill("1"))).toBe("1111111111111111");
       });
       test("17桁(上限オーバー)", () => {
-        expect(calc(...Array(17).fill("1"))).toBe("1 111 111 111 111 111");
+        expect(calc(...Array(17).fill("1"))).toBe("1111111111111111");
       });
     });
   });
