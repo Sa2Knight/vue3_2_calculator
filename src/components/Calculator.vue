@@ -34,14 +34,6 @@ export default defineComponent({
     const calculatorState = calculator.state;
     const { sendCommand, buttonLabels } = calculator;
 
-    // prettier-ignore
-    const calcButtonLabels = [
-        "C", "+=", "%", "/",
-        "7", "8", "9", "X",
-        "4", "5", "6", "-",
-        "1", "2", "3", "+",
-        "0", ".",
-    ]
     return {
       calculatorState,
       sendCommand,
