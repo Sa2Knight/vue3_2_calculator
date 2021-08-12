@@ -5,7 +5,7 @@ describe("compositions", () => {
     const calc = (...commands: Command[]): string => {
       const calculator = useCalculator();
       commands.forEach((command) => calculator.sendCommand(command));
-      return calculator.displayValue.value;
+      return calculator.state.value.displayValue;
     };
 
     describe("左辺のみ入力するパターン", () => {
@@ -109,10 +109,53 @@ describe("compositions", () => {
       });
     });
 
-    // describe("小数点を使うパターン", () => {
-    //   test(".", () => {
-    //     expect(calc(".")).toBe('"0."')
-    //   })
-    // })
+    describe("小数点を使うパターン", () => {
+      test(".", () => {
+        expect(calc(".")).toBe("0.");
+      });
+      test("2 .", () => {
+        expect(calc("2", ".")).toBe("2.");
+      });
+      test("2 . .", () => {
+        expect(calc("2", ".", ".")).toBe("2.");
+      });
+      test(". 0 1", () => {
+        expect(calc(".", "0", "1")).toBe("0.01");
+      });
+      test("2 . 5 6", () => {
+        expect(calc("2", ".", "5", "6")).toBe("2.56");
+      });
+      test("1 . 1 . 1", () => {
+        expect(calc("1", ".", "1", ".", "1")).toBe("1.11");
+      });
+      test("0 . 2 5 X 4 . 0 0 + 9 . 0 / 0 . 1 - 0 . 1 = ", () => {
+        expect(
+          calc(
+            "0",
+            ".",
+            "2",
+            "5",
+            "X",
+            "4",
+            ".",
+            "0",
+            "0",
+            "+",
+            "9",
+            ".",
+            "0",
+            "/",
+            "0",
+            ".",
+            "1",
+            "-",
+            "0",
+            ".",
+            "1",
+            "="
+          )
+        ).toBe("99.9");
+      });
+    });
   });
 });

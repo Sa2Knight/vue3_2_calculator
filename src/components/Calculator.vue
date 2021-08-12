@@ -1,7 +1,7 @@
 <template>
   <div class="calculator">
     <div class="screen">
-      <div class="answer">{{ displayValue }}</div>
+      <div class="answer">{{ calculatorState.displayValue }}</div>
     </div>
     <div class="buttons">
       <CalcButton
@@ -30,8 +30,9 @@ import CalcButton from "./CalcButton.vue";
 export default defineComponent({
   components: { CalcButton },
   setup() {
-    const calculator = useCalculator(0);
-    const { displayValue, sendCommand, buttonLabels } = calculator;
+    const calculator = useCalculator();
+    const calculatorState = calculator.state;
+    const { sendCommand, buttonLabels } = calculator;
 
     // prettier-ignore
     const calcButtonLabels = [
@@ -41,7 +42,11 @@ export default defineComponent({
         "1", "2", "3", "+",
         "0", ".",
     ]
-    return { displayValue, sendCommand, buttonLabels };
+    return {
+      calculatorState,
+      sendCommand,
+      buttonLabels,
+    };
   },
 });
 </script>

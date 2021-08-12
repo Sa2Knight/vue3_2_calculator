@@ -1,20 +1,7 @@
-import { format } from "prettier";
 import { computed, reactive, ref, watch } from "vue";
+import { Formula } from "../lib/formula";
 
 export type Command = typeof buttonLabels[number];
-export type Formula = {
-  leftValue: number;
-  operator: "+" | "-" | "X" | "/" | null;
-  rightValue: number | null;
-  isPointEnd: boolean;
-};
-
-const initialFormula: Formula = {
-  leftValue: 0,
-  operator: null,
-  rightValue: null,
-  isPointEnd: false,
-};
 
 // prettier-ignore
 const buttonLabels = [
@@ -25,126 +12,61 @@ const buttonLabels = [
   "0", ".", "="
 ] as const
 
-function calcable(formula: Formula): boolean {
-  return formula.operator !== null && formula.rightValue !== null;
-}
-
-function calc(formula: Formula): Formula {
-  const { leftValue, operator, rightValue } = formula;
-  if (operator === null || rightValue === null) return formula;
-
-  const answer = (() => {
-    switch (operator) {
-      case "+":
-        return leftValue + rightValue;
-      case "-":
-        return leftValue - rightValue;
-      case "X":
-        return leftValue * rightValue;
-      case "/":
-        return leftValue / rightValue;
-    }
-  })();
-
-  return {
-    leftValue: answer,
-    operator: null,
-    rightValue: null,
-    isPointEnd: false,
-  };
-}
-
-function appendNumber(v1: number | string, v2: number | string): number {
-  return Number(`${v1}${v2}`);
-}
-
-function inversion(value: number): number {
-  return value * -1;
-}
-
 /**
  * 計算コマンドと現在の式を渡して新しい式を生成する
  */
-function runCommand(command: Command, formula: Formula): Formula {
+function runCommand(
+  displayValue: string,
+  command: Command,
+  formula: Formula
+): string {
   switch (command) {
     case "C":
-      return initialFormula;
+      formula.clear();
+      return formula.displayValue();
     case "+-":
-      if (formula.rightValue) {
-        return {
-          leftValue: inversion(formula.rightValue),
-          operator: null,
-          rightValue: null,
-          isPointEnd: false,
-        };
-      } else {
-        return {
-          ...formula,
-          leftValue: inversion(formula.leftValue),
-        };
-      }
+      formula.inverse();
+      return formula.displayValue();
     case "%":
-      if (formula.rightValue) {
-        return {
-          leftValue: formula.rightValue / 100,
-          operator: null,
-          rightValue: null,
-          isPointEnd: false,
-        };
-      } else {
-        return {
-          leftValue: formula.leftValue / 100,
-          operator: null,
-          rightValue: null,
-          isPointEnd: false,
-        };
-      }
+      formula.transToPercentage();
+      return formula.displayValue();
     case "/":
     case "X":
     case "-":
     case "+":
-      return {
-        ...calc(formula),
-        operator: command,
-        rightValue: 0,
-      };
-    case ".":
-      alert("未実装");
-      return initialFormula;
-    case "=":
-      return calc(formula);
-    default:
       if (formula.operator) {
-        return {
-          ...formula,
-          rightValue: appendNumber(formula.rightValue || 0, command),
-        };
+        formula.calc();
+        formula.setOperator(command);
       } else {
-        return {
-          ...formula,
-          leftValue: appendNumber(formula.leftValue, command),
-        };
+        formula.setLeftValue(displayValue);
+        formula.setOperator(command);
       }
+      return formula.displayValue();
+    case ".":
+      formula.appendPoint();
+      return formula.displayValue();
+    case "=":
+      formula.calc();
+      return formula.displayValue();
+    default:
+      // 0,1,2,3,4,5,6,7,8,9
+      formula.appendValue(command);
+      return formula.displayValue();
   }
 }
 
 export default function useCalculator() {
-  const state = reactive<{ formula: Formula }>({
-    formula: { ...initialFormula },
-  });
-  const displayValue = computed(() => {
-    const value = state.formula.rightValue || state.formula.leftValue;
-    return state.formula.isPointEnd ? `${value}.` : `${value}`;
+  type State = { displayValue: string; formula: Formula };
+  const state = ref<State>({
+    displayValue: "0",
+    formula: new Formula(),
   });
   const sendCommand = (command: Command) => {
-    state.formula = runCommand(command, state.formula);
+    state.value.displayValue = runCommand(
+      state.value.displayValue,
+      command,
+      state.value.formula
+    );
   };
-  // for debug
-  watch(
-    () => state.formula,
-    () => {
-      console.log(state.formula);
-    }
-  );
-  return { displayValue, sendCommand, buttonLabels };
+  return { state, sendCommand, buttonLabels };
 }
