@@ -1,5 +1,3 @@
-import { Command } from "../compositions/useCalculator";
-
 type Operator = "+" | "-" | "X" | "/";
 
 export class Formula {
@@ -13,7 +11,7 @@ export class Formula {
     this.rightValue = null;
   }
 
-  displayValue() {
+  currentValue() {
     return this.rightValue === null ? this.leftValue : this.rightValue;
   }
 

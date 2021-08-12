@@ -23,13 +23,13 @@ function runCommand(
   switch (command) {
     case "C":
       formula.clear();
-      return formula.displayValue();
+      return formula.currentValue();
     case "+-":
       formula.inverse();
-      return formula.displayValue();
+      return formula.currentValue();
     case "%":
       formula.transToPercentage();
-      return formula.displayValue();
+      return formula.currentValue();
     case "/":
     case "X":
     case "-":
@@ -41,17 +41,17 @@ function runCommand(
         formula.setLeftValue(displayValue);
         formula.setOperator(command);
       }
-      return formula.displayValue();
+      return formula.currentValue();
     case ".":
       formula.appendPoint();
-      return formula.displayValue();
+      return formula.currentValue();
     case "=":
       formula.calc();
-      return formula.displayValue();
+      return formula.currentValue();
     default:
       // 0,1,2,3,4,5,6,7,8,9
       formula.appendValue(command);
-      return formula.displayValue();
+      return formula.currentValue();
   }
 }
 
