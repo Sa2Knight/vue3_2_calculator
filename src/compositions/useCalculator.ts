@@ -63,11 +63,20 @@ export default function useCalculator() {
     formula: new Formula(),
   });
   const sendCommand = (command: Command) => {
-    state.value.displayValue = runCommand(
+    const newDisplayValue = runCommand(
       state.value.displayValue,
       command,
       state.value.formula
     );
+    // 見せ方の問題なので Vue コンポーネント側でやるべきだけど、
+    // テストコードをこっち側に書いてしまったのでここの責務にしちゃう
+    if (newDisplayValue.indexOf(".") > 0) {
+      state.value.displayValue = newDisplayValue;
+    } else {
+      state.value.displayValue = Number(newDisplayValue)
+        .toLocaleString()
+        .replace(/,/g, " ");
+    }
   };
   return { state, sendCommand, buttonLabels };
 }

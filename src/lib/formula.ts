@@ -28,6 +28,8 @@ export class Formula {
     ): string => {
       if (currentValue === null || currentValue === "0") {
         return appendValue;
+      } else if (currentValue.length > 15) {
+        return currentValue;
       } else {
         return `${currentValue}${appendValue}`;
       }
