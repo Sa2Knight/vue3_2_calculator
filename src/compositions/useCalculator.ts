@@ -35,7 +35,7 @@ function runCommand(
     case "-":
     case "+":
       if (formula.operator) {
-        formula.calc();
+        formula.clear(Number(formula.calc()));
         formula.setOperator(command);
       } else {
         formula.setLeftValue(displayValue);
@@ -46,8 +46,9 @@ function runCommand(
       formula.appendPoint();
       return formula.currentValue();
     case "=":
-      formula.calc();
-      return formula.currentValue();
+      const answer = formula.calc();
+      formula.clear();
+      return answer;
     default:
       // 0,1,2,3,4,5,6,7,8,9
       formula.appendValue(command);

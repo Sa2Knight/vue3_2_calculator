@@ -82,9 +82,9 @@ export class Formula {
     this.operator = operator;
   }
 
-  calc() {
+  calc(): string {
     const { leftValue, operator, rightValue } = this;
-    if (operator === null || rightValue === null) return;
+    if (operator === null || rightValue === null) return this.currentValue();
 
     const answer = (() => {
       const leftNumber = Number(leftValue);
@@ -101,6 +101,6 @@ export class Formula {
       }
     })();
 
-    this.clear(answer);
+    return `${answer}`;
   }
 }
