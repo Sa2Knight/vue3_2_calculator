@@ -31,11 +31,8 @@
     "vue-tsc": "^0.2.2"
   },
   "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
     "testMatch": [
-      "**/__tests__/ut/**/*.+(ts|tsx|js)"
+      "<rootDir>/src/**/*.spec.ts"
     ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"

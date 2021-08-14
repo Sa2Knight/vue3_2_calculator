@@ -1,4 +1,4 @@
-import useCalculator, { Command } from "../../../compositions/useCalculator";
+import useCalculator, { Command } from "./useCalculator";
 
 describe("compositions", () => {
   describe("useCalculator", () => {
