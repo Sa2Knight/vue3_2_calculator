@@ -16,7 +16,7 @@ const buttonLabels = [
  * 計算コマンドと現在の式を渡して新しい式を生成する
  */
 function runCommand(
-  displayValue: string,
+  currentValue: string,
   command: Command,
   formula: Formula
 ): string {
@@ -38,7 +38,7 @@ function runCommand(
         formula.clear(Number(formula.calc()));
         formula.setOperator(command);
       } else {
-        formula.setLeftValue(displayValue);
+        formula.setLeftValue(currentValue);
         formula.setOperator(command);
       }
       return formula.currentValue();
@@ -57,14 +57,14 @@ function runCommand(
 }
 
 export default function useCalculator() {
-  type State = { displayValue: string; formula: Formula };
+  type State = { currentValue: string; formula: Formula };
   const state = ref<State>({
-    displayValue: "0",
+    currentValue: "0",
     formula: new Formula(),
   });
   const sendCommand = (command: Command) => {
-    state.value.displayValue = runCommand(
-      state.value.displayValue,
+    state.value.currentValue = runCommand(
+      state.value.currentValue,
       command,
       state.value.formula
     );

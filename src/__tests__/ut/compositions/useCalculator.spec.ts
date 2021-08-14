@@ -5,7 +5,7 @@ describe("compositions", () => {
     const calc = (...commands: any[]): string => {
       const calculator = useCalculator();
       commands.forEach((command) => calculator.sendCommand(command));
-      return calculator.state.value.displayValue;
+      return calculator.state.value.currentValue;
     };
 
     describe("左辺のみ入力するパターン", () => {
